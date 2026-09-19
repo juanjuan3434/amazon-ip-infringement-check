@@ -1,8 +1,8 @@
 import os
 from PIL import Image, ImageDraw
 
-D = r'C:\Users\34347\WorkBuddy\2026-08-21-09-54-29\ip_check\spray'
-os.chdir(D)
+# 工作目录：优先环境变量 IPCHECK_DIR，否则用当前工作目录（在案例目录里直接跑即可）
+os.chdir(os.environ.get("IPCHECK_DIR") or os.getcwd())
 
 items = []
 

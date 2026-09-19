@@ -3,9 +3,12 @@
 Reuses the (verified) decoder in g4.py."""
 import os, re, struct, json, ssl, urllib.request, importlib.util, sys
 
-BASE = r"C:\Users\34347\WorkBuddy\2026-08-21-09-54-29\ip_check\bandana_figs"
-sys.path.insert(0, BASE)
-spec = importlib.util.spec_from_file_location("g4", os.path.join(BASE, "g4.py"))
+# 工作目录：优先环境变量 IPCHECK_DIR，否则用当前工作目录（在哪个案例目录里跑就处理哪的数据）
+BASE = os.environ.get("IPCHECK_DIR") or os.getcwd()
+# 解码器始终从本脚本所在目录加载 —— 避免误用案例目录里那份过期的 g4.py 拷贝
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+spec = importlib.util.spec_from_file_location("g4", os.path.join(HERE, "g4.py"))
 g4 = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(g4)
 

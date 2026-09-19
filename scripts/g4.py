@@ -264,7 +264,8 @@ def downsample(rows, width, height, f):
 
 
 if __name__ == "__main__":
-    base = r"C:\Users\34347\WorkBuddy\2026-08-21-09-54-29\ip_check\bandana_figs"
+    # 自测：读取当前目录（或 IPCHECK_DIR）下的 _figs.json
+    base = os.environ.get("IPCHECK_DIR") or os.getcwd()
     meta = json.load(open(os.path.join(base, "_figs.json"), encoding="utf-8"))
     report = []
     for item in meta:

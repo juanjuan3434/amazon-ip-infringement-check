@@ -33,7 +33,19 @@
 
 ## 安装
 
-**用户级（推荐，所有项目可用）：**
+> ⚠️ 本仓库目前是**私有**的：对方没有仓库权限时 `git clone` 会直接 404。分享给他人请优先用**方式一**。
+
+**方式一：直接给文件夹（推荐，分享给单个同事）**
+
+1. 拿到压缩包（或直接拷这个文件夹）
+2. 解压 / 放到技能目录，二选一：
+   - **用户级**（推荐，所有项目都能用）：`~/.workbuddy/skills/amazon-ip-infringement-check`
+     Windows：`%USERPROFILE%\.workbuddy\skills\amazon-ip-infringement-check`
+   - **项目级**（只在某项目生效）：`<项目目录>/.workbuddy/skills/amazon-ip-infringement-check`
+3. 确认结构是 `…/amazon-ip-infringement-check/SKILL.md` —— **SKILL.md 必须直接位于该文件夹根下**，不要多套一层目录
+4. 重启 WorkBuddy 会话，技能列表里出现 `amazon-ip-infringement-check` 即生效
+
+**方式二：git clone**（仅当对方有该私有仓库的访问权限）
 
 ```bash
 git clone https://github.com/juanjuan3434/amazon-ip-infringement-check.git \
@@ -47,11 +59,19 @@ git clone https://github.com/juanjuan3434/amazon-ip-infringement-check.git `
   "$env:USERPROFILE\.workbuddy\skills\amazon-ip-infringement-check"
 ```
 
-**或者**直接把本文件夹拷到 `~/.workbuddy/skills/` 下即可，无需构建、无需依赖（脚本各自按需装库）。
+**运行环境**：Python 3.9+（绝大多数脚本只用标准库；`pdftext.py` 需 `pypdf`，`cmpside.py` / `decf*.py` / `relimgs*.py` 需 `Pillow`）；`amz.js` / `dl*.js` / `fetch*.js` 需 Node 18+（用内置 fetch，无需装包）。需要能访问 Google Patents / USPTO / FreePatentsOnline 等检索站点。
 
-**项目级安装**：放到 `<项目目录>/.workbuddy/skills/` 下，仅该项目可用。
+## 案例数据目录约定（跨机器可移植）
 
-安装后重启会话，技能列表里出现 `amazon-ip-infringement-check` 即生效。
+脚本**不写死任何本机路径**，换成别人电脑也能直接跑：
+
+- **工作目录**（放案例的 PDF、图片、输出的文件夹）由环境变量 `IPCHECK_DIR` 指定；**不设则用当前工作目录**。所以最省事的用法是：`cd` 进案例目录再跑脚本，例如 `python <skill>/scripts/sheets.py D1000009 2,3`。
+- 脚本之间的互相调用（如 `decf.py` → `decode.py`、各脚本加载 `g4.py`）一律按**脚本自身所在目录**解析，因此技能装在哪个盘、哪个用户名下都不影响。
+- 想固定指向某个案例目录，也可以设一次环境变量：
+  ```powershell
+  $env:IPCHECK_DIR = "D:\cases\bandana"     # 当前会话有效
+  ```
+
 
 ## 用法
 
@@ -153,6 +173,7 @@ amazon-ip-infringement-check/
 
 | 版本 | 主要更新 |
 |---|---|
+| **v4.8.1** | **跨机器可移植**：清除全部 14 处写死的本机路径；脚本改为从**自身所在目录**加载 `g4.py` / `decode.py`；工作目录改由 `IPCHECK_DIR` 环境变量或当前目录决定；补全 `name` / `description` 元数据（让技能能被正确识别与触发） |
 | **v4.8** | 同款侦察的「公版 vs 克隆集群」二分类；原版权利人溯源 + 权利矩阵穷举；「改颜色躲不掉」判据；EP 授权 + GB 指定读法；EPO 通道 |
 | v4.7 | 双市场（US+UK）作业差异；通用品类名抢注；近失专利必须下载核实 |
 | v4.6 | 关联商品轮播 = 同款侦察窗口；异形/瓶型外观专利的有限穷尽策略 |

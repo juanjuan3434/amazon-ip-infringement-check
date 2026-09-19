@@ -1,4 +1,7 @@
 ---
+name: amazon-ip-infringement-check
+version: "4.8.1"
+description: 亚马逊选品侵权排查 SOP（发明/外观专利为核心 + 版权 + 诉讼 + 平台风险）。当用户给出 Amazon 链接 / ASIN / 目标站点，问「这个产品能不能做、会不会侵权、帮我查专利风险、做一下 FTO」时使用。只查用户提供的链接与主图本身；商标、合规资质、原品牌、供应链一律不查。输出 0-10 分分级风险评分表 + Claim Chart + 「可做 / 不可做」一句话结论。
 title: "Amazon 产品侵权排查（IP Infringement Check）"
 summary: "只查用户提供的 Amazon 链接/ASIN 本身侵权风险：发明/外观专利（核心）+ 版权（用户提供主图）+ 诉讼 + 平台风险。商标、合规、供应链、自有品牌一律不查（用户边界）。输出 0-10 分评级与 Claim Chart。"
 agent_created: true
@@ -139,6 +142,8 @@ read_when:
 
 ### 专利附图解码流水线（scripts/ 已内置，直接复用）
 
+> **跨机器可移植（v4.8.1）**：脚本**不写死任何本机路径**。① 脚本互相调用（`decode.py`、`g4.py`）一律按**脚本自身所在目录**解析；② 案例**工作目录**由环境变量 `IPCHECK_DIR` 决定，不设则用当前目录 —— 所以最省事的用法是 `cd` 进案例目录再跑。分享给别人时整个文件夹拷过去即可用。
+
 | 脚本 | 作用 | 用法 |
 |---|---|---|
 | `scripts/sheets.py` | **主力**：从已下载的专利 PDF 中抽取指定页的图纸并解码为 PNG | `python sheets.py D1000009 2,3` → 产出 `D1000009_sheet2.png` |
@@ -174,8 +179,8 @@ read_when:
 **🔑 USPTO PDF 下载被 403 时的绕行方案（2026-09-10 实测）**：`image-ppubs.uspto.gov` 会**限流**——连续下载若干件后，PowerShell 的 `Invoke-WebRequest` 会开始返回 **403（即使换个专利号也 403，甚至重下之前成功的号也 403）**。此时**改用 Node 内置 fetch 直连即可成功（200，application/pdf）**：
 
 ```bash
-# Node 22 managed runtime，无需装任何包
-"C:/Users/34347/.workbuddy/binaries/node/versions/22.22.2-3/node.exe" -e "
+# 用 node（版本 ≥18，无需装任何包；把下面的 node 换成你机器上的路径即可）
+node -e "
 const fs=require('fs');
 (async()=>{const r=await fetch('https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/D1005617',
   {headers:{'User-Agent':'Mozilla/5.0','Accept':'application/pdf,*/*'}});

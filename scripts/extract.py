@@ -1,7 +1,8 @@
 import re, os, struct, json
 
-base = r"C:\Users\34347\WorkBuddy\2026-08-21-09-54-29\ip_check\bandana_figs"
-path = os.path.join(base, "D1000009.pdf")
+# 工作目录：优先环境变量 IPCHECK_DIR，否则用当前工作目录
+base = os.environ.get("IPCHECK_DIR") or os.getcwd()
+path = os.path.join(base, "D1000009.pdf")     # ← 改成你要解析的 PDF 文件名
 data = open(path, "rb").read()
 
 log = []

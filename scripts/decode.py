@@ -2,8 +2,9 @@
 """Decode selected pages of a USPTO PDF to PNG (cone collar case)."""
 import os, re, sys, importlib.util
 
-SKILL = r"C:\Users\34347\.workbuddy\skills\amazon-ip-infringement-check\scripts"
-spec = importlib.util.spec_from_file_location("g4", os.path.join(SKILL, "g4.py"))
+# 解码器从本脚本所在目录加载（与安装位置无关，换机器/换用户名都能跑）
+HERE = os.path.dirname(os.path.abspath(__file__))
+spec = importlib.util.spec_from_file_location("g4", os.path.join(HERE, "g4.py"))
 g4 = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(g4)
 

@@ -1,9 +1,10 @@
 import os, subprocess, sys
 from PIL import Image, ImageDraw
 
-P = r'C:\Users\34347\.workbuddy\binaries\python\versions\3.13.12\python.exe'
-D = r'C:\Users\34347\WorkBuddy\2026-08-21-09-54-29\ip_check\spray'
-os.chdir(D)
+P = sys.executable                      # 用当前解释器，换机器/换 Python 版本都不会失效
+HERE = os.path.dirname(os.path.abspath(__file__))
+# 工作目录：优先环境变量 IPCHECK_DIR，否则用当前工作目录（在案例目录里直接跑即可）
+os.chdir(os.environ.get("IPCHECK_DIR") or os.getcwd())
 
 pdfs = ['D1108260', 'D1014284', 'D1002381', 'D888570', 'D887842', 'D813673',
         'D700521', 'D709381', 'D1084872', 'D1145154', 'D1125697', 'D1114352',
@@ -21,7 +22,7 @@ for n in pdfs:
         if os.path.exists(target):
             continue
         try:
-            subprocess.run([P, 'decode.py', fn, outdir, str(idx), '2'],
+            subprocess.run([P, os.path.join(HERE, 'decode.py'), fn, outdir, str(idx), '2'],
                            capture_output=True, timeout=110)
         except Exception as e:
             print(n, idx, 'ERR', e)
