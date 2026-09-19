@@ -150,7 +150,7 @@ read_when:
 | **`scripts/h2t.py`** | **把 FPO 单篇专利页 HTML 抽成纯文本**（供 `fmt.py` 再断行） | `python h2t.py fpo_12492043.html fpo_12492043.txt` |
 | **`scripts/pfpo.py`** | **解析 FPO 检索结果页**，输出「专利号 \| 名称 \| 摘要片段」清单（自动去重、顺带抓总数） | `python pfpo.py q1.html _q1.txt` |
 | **`scripts/ctx.py`** | **在 Amazon HTML 里定位关键词上下文 + 邻近 ASIN**。用途：页面出现 `patent` / `[US Design Patent]` 字样时，判断它属于**本品**还是**关联商品轮播里的竞品** | `python ctx.py amz.html "US Design Patent" 1500` |
-| **`scripts/detail.py`** | 抽取 Amazon 详情字段：**BSR / Date First Available / 型号 / 变体 ASIN / 价格 / 所有 patent 字样**（比 `extract_amz.py` 更全，兼容新旧版式） | `python detail.py amz.html` |
+| **`scripts/detail.py`** | 抽取 Amazon 详情字段：**BSR / Date First Available / 型号 / 变体 ASIN / 价格 / 所有 patent 字样**（兼容新旧版式） | `python detail.py amz.html` |
 | **`scripts/x2.py`** | ★ **最全的 Amazon 字段提取（推荐的默认工具）**：标题 / 五点 / 全部 Detail 字段 / **patent 关键词计数（全大小写 + design patent + Patent Pending + 专利）** / 变体 ASIN / 全部图片 key。计数 = 0 是一条重要结论 | `python x2.py amz.html` → `_x2.txt` |
 | **`scripts/ximgs.py`** | ★ **抽出页面内全部商品图 URL + 关联 ASIN 出现频次**（为「同款侦察」提供原料） | `python ximgs.py` → `_imgs.txt` |
 | **`scripts/relimgs.py`** | ★ **下载关联商品图并拼成 contact sheet**（`rel_montage.png`）——**一屏目视即可发现同款**，是「同款侦察」的核心 | 改里面的 `urls` 列表后 `python relimgs.py` |
@@ -165,6 +165,7 @@ read_when:
 | **`scripts/pdftext.py`** | ★ **任意专利 PDF 抽文本 + 单独抽「权利要求」**（EP / WIPO / 公开申请 = 文字流），并顺手抽查扉页 **指定国清单 / 期限 / 权利人 / 发明人** —— 命中发明专利后的取证第一步 | `python pdftext.py EP4342332B1.pdf _ep.txt _ep_claims.txt`（缺库时 `python -m pip install pypdf`） |
 | **`scripts/dl_ep.js`** | ★ **EPO 公开出版服务下载模板**（EP 授权文本 B1 / 公开 A1）—— **URL 里 EP 号后必须带国别码**（NW 等），日期是授权公告日 | 改 `list` 后 `node dl_ep.js` |
 | **`scripts/fetch_site.js`** | ★ **带浏览器 UA 的通用站点抓取**（权利人官网 / **第三方分销商页** / 案件通报页）—— **品牌官网 403 时改抓分销商页**（本案 UK 4 件注册外观号 + EU RCD 号即由此得来） | 改 `sites` 后 `node fetch_site.js` → 再 `h2t.py` 转文本 |
+| **`scripts/fetchall.js`** | **通用批量抓取**（清单文件每行 `输出文件名|URL`，3 次重试 + 可调延迟，日志落 `_fetchlog.txt`）—— FPO 检索页、分销商页等**会间歇性 reset** 的站点成批抓 | `node fetchall.js urls.txt 1500` |
 | **`scripts/amz.js`** | **Amazon 页面重试抓取**（3 组 UA 轮换 + 8 次重试，字节数 >200 KB 才落盘）——首抓常返回 3.7 KB 的机器人页 | `node amz.js amz.html "<url>"` |
 | **`scripts/dl.js`** | **USPTO PDF 批量下载模板**（带 AbortController 110s 超时 + 4 次重试 + 已存在跳过）——**大 PDF 也能下，别再写"附图无法获取"** | 改 `list` 里的 `[文件名, 专利号]` |
 | `scripts/extract.py` | 把 PDF 内嵌 image XObject 的 CCITT 码流抽出并重封装为 TIFF（调试用） | — |
@@ -446,7 +447,7 @@ v4.6 把「同款侦察」定义为**去风险工具**：≥2 个不同品牌同
 4. **顺手挖出反证**：在位大卖的自述往往能证明"哪一层已无权利"。本案 RoyalCare 标题写 "[US Design Patent]"、描述写 "Our dog treat pouches have US Design Patent. **Others are fake**" —— 这句话恰好**反证了"我们这条硅胶路线之外的其他形态没有专利可用"**（否则它会一并主张）。这与「权利人自己把标准三角巾列为专利之外的一般现有技术」是同一手法。
 
 **⚠️ 必查项：页面里的 `patent` 字样可能不属于本品**
-Amazon 详情页会出现"关联商品轮播"，竞品标题会带 `[US Design Patent]` / `[Patented]` 字样。`extract_amz.py` 只会把这些字样一股脑列出来，**很容易误判成本品声称**。
+Amazon 详情页会出现"关联商品轮播"，竞品标题会带 `[US Design Patent]` / `[Patented]` 字样。**只做全页关键词罗列、不定位上下文，很容易把这些字样误判成本品声称。**
 → **动作：用 `scripts/ctx.py` 定位关键词上下文，读"邻近 ASIN"字段**。本案正是靠这一步发现"字样属轮播竞品 RoyalCare（B07ZFCHCP3，5,687 评价）"，才进一步挖到硅胶款的专利墙 D874826 与其威慑话术。
 
 **⚠️ 检索词必须覆盖「佩戴方式词」，不能只按「用途词」**

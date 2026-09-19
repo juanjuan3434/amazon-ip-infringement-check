@@ -98,7 +98,8 @@ amazon-ip-infringement-check/
 | `x2.py` | 全字段提取（标题/五点/BSR/变体/**patent 字样计数**/图片 key） |
 | `detail.py` | 详情字段提取（兼容新旧版式） |
 | `ctx.py` | 关键词上下文定位（判断 `patent` 字样属本品还是轮播竞品） |
-| `uimgs.py` | 抽全部商品图 + 关联 ASIN 频次（英国等非美站点版） |
+| `ximgs.py` | 抽全部商品图 + 关联 ASIN 频次（美国站点版） |
+| `uimgs.py` | 同上，英国等非美站点版 |
 | `mapimg.py` | 关联图 ↔ ASIN 映射 |
 
 **同款侦察（核心手法）**
