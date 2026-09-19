@@ -10,7 +10,7 @@ items = []
 im = Image.open('img1.jpg').convert('RGB')
 W, H = im.size
 crop = im.crop((int(W * 0.15), int(H * 0.02), int(W * 0.62), int(H * 1.0)))
-items.append(('OURS  B0HG9MYZKS', crop))
+items.append(('OURS  B0XXXXXX04', crop))
 
 # 2. D675100 sheet
 for p, lab in [('figsD675100/D675100_p03.png', 'D675100 (capsule shaped container)'),

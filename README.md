@@ -44,6 +44,11 @@
    - **项目级**（只在某项目生效）：`<项目目录>/.workbuddy/skills/amazon-ip-infringement-check`
 3. 确认结构是 `…/amazon-ip-infringement-check/SKILL.md` —— **SKILL.md 必须直接位于该文件夹根下**，不要多套一层目录
 4. 重启 WorkBuddy 会话，技能列表里出现 `amazon-ip-infringement-check` 即生效
+5. **建议先跑一次环境自检**，确认本机齐活：
+   ```bash
+   python "<技能目录>/scripts/doctor.py"
+   ```
+   输出 `结论：核心功能可用 ✅` 即没问题；若有 `[WARN]` 只影响个别脚本，`[FAIL]` 会告诉你缺什么。
 
 **方式二：git clone**（公开仓库，任何人可直接克隆，无需账号或授权）
 
@@ -112,6 +117,12 @@ amazon-ip-infringement-check/
 
 ## 脚本速查
 
+**先跑这个：环境自检**
+
+| 脚本 | 作用 |
+|---|---|
+| `doctor.py` | 一键自检：Python 版本 / 脚本是否齐全 / **解码器能否加载** / 工作目录可写 / Node / 可选依赖（PIL、pypdf）。装完先跑一次，缺什么一目了然 |
+
 **Amazon 页面解析**
 
 | 脚本 | 作用 |
@@ -175,6 +186,7 @@ amazon-ip-infringement-check/
 
 | 版本 | 主要更新 |
 |---|---|
+| **v4.8.2** | **公开发布前脱敏**：清除全部 16 处真实 ASIN 与自有品牌名（改为 `B0XXXXXXnn` 占位符，方法论与结论不受影响）；新增 `scripts/doctor.py` 环境自检 |
 | **v4.8.1** | **跨机器可移植**：清除全部 14 处写死的本机路径；脚本改为从**自身所在目录**加载 `g4.py` / `decode.py`；工作目录改由 `IPCHECK_DIR` 环境变量或当前目录决定；补全 `name` / `description` 元数据（让技能能被正确识别与触发）；仓库转为**公开**并采用 **MIT** 许可证 |
 | **v4.8** | 同款侦察的「公版 vs 克隆集群」二分类；原版权利人溯源 + 权利矩阵穷举；「改颜色躲不掉」判据；EP 授权 + GB 指定读法；EPO 通道 |
 | v4.7 | 双市场（US+UK）作业差异；通用品类名抢注；近失专利必须下载核实 |

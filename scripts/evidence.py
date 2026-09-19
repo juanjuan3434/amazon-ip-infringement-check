@@ -8,7 +8,7 @@ def load(fn, w):
 
 W = 420
 items = [
-    ('本产品主图(Amazon UK B0HD6MFQ7X)', 'pimg00.jpg'),
+    ('本产品主图(Amazon UK B0XXXXXX05)', 'pimg00.jpg'),
     ('包装特写 POPCORN PENS / 6 Pack', 'pk_zoom.png'),
     ('效果图（吹风机发泡成 3D）', 'art_zoom.png'),
     ('USD1049230S FIG.3（钻石画点钻笔，不命中）', 'D1049230_p04.png'),
