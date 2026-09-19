@@ -33,7 +33,7 @@
 
 ## 安装
 
-> ⚠️ 本仓库目前是**私有**的：对方没有仓库权限时 `git clone` 会直接 404。分享给他人请优先用**方式一**。
+> 本仓库已**公开**：任何人可直接 `git clone`，或在 GitHub 页面点 **Code → Download ZIP**（无需账号）。
 
 **方式一：直接给文件夹（推荐，分享给单个同事）**
 
@@ -45,7 +45,7 @@
 3. 确认结构是 `…/amazon-ip-infringement-check/SKILL.md` —— **SKILL.md 必须直接位于该文件夹根下**，不要多套一层目录
 4. 重启 WorkBuddy 会话，技能列表里出现 `amazon-ip-infringement-check` 即生效
 
-**方式二：git clone**（仅当对方有该私有仓库的访问权限）
+**方式二：git clone**（公开仓库，任何人可直接克隆，无需账号或授权）
 
 ```bash
 git clone https://github.com/juanjuan3434/amazon-ip-infringement-check.git \
@@ -58,6 +58,8 @@ Windows：
 git clone https://github.com/juanjuan3434/amazon-ip-infringement-check.git `
   "$env:USERPROFILE\.workbuddy\skills\amazon-ip-infringement-check"
 ```
+
+> ⚠️ 用 **Download ZIP** 方式时，GitHub 解压出来的目录名会带 `-main` 后缀（`amazon-ip-infringement-check-main`），**建议重命名**为 `amazon-ip-infringement-check` 再放进技能目录，避免技能名不干净。
 
 **运行环境**：Python 3.9+（绝大多数脚本只用标准库；`pdftext.py` 需 `pypdf`，`cmpside.py` / `decf*.py` / `relimgs*.py` 需 `Pillow`）；`amz.js` / `dl*.js` / `fetch*.js` 需 Node 18+（用内置 fetch，无需装包）。需要能访问 Google Patents / USPTO / FreePatentsOnline 等检索站点。
 
@@ -173,7 +175,7 @@ amazon-ip-infringement-check/
 
 | 版本 | 主要更新 |
 |---|---|
-| **v4.8.1** | **跨机器可移植**：清除全部 14 处写死的本机路径；脚本改为从**自身所在目录**加载 `g4.py` / `decode.py`；工作目录改由 `IPCHECK_DIR` 环境变量或当前目录决定；补全 `name` / `description` 元数据（让技能能被正确识别与触发） |
+| **v4.8.1** | **跨机器可移植**：清除全部 14 处写死的本机路径；脚本改为从**自身所在目录**加载 `g4.py` / `decode.py`；工作目录改由 `IPCHECK_DIR` 环境变量或当前目录决定；补全 `name` / `description` 元数据（让技能能被正确识别与触发）；仓库转为**公开**并采用 **MIT** 许可证 |
 | **v4.8** | 同款侦察的「公版 vs 克隆集群」二分类；原版权利人溯源 + 权利矩阵穷举；「改颜色躲不掉」判据；EP 授权 + GB 指定读法；EPO 通道 |
 | v4.7 | 双市场（US+UK）作业差异；通用品类名抢注；近失专利必须下载核实 |
 | v4.6 | 关联商品轮播 = 同款侦察窗口；异形/瓶型外观专利的有限穷尽策略 |
@@ -183,6 +185,10 @@ amazon-ip-infringement-check/
 ## 免责声明
 
 本 SOP 及脚本产出的是**公开资料筛查结果**，**不构成律师的法律意见，也不是 FTO（自由实施）分析报告**。所有结论均标注了证据等级（A 公开证据 / B 间接证据 / C 推测），存在无法穷尽的检索路径（如泛化标题的外观专利库）。**涉及重大投入前，请咨询专业知识产权律师。**
+
+## 许可证
+
+本项目采用 **MIT License**，详见 [LICENSE](LICENSE)。可自由使用、修改、再分发（保留版权声明即可）。
 
 ---
 
