@@ -1,0 +1,26 @@
+# 排查过程产生的中间产物（不进版本库）
+_*.txt
+_*.html
+_*.json
+*.pdf
+*.zip
+*.log
+
+# 抓取/截图/拼图产物
+*.png
+*.jpg
+*.jpeg
+*.webp
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
